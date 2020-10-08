@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/CodeLighthouse/sdk-python",
     packages=setuptools.find_packages(),
     license='MIT',
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     install_requires=[
         'requests'
     ]
