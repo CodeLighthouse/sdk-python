@@ -5,8 +5,8 @@ from codelighthouse.CodeLighthouseWebHandler import CodeLighthouseWebHandler
 
 class CodeLighthouse(ContextDecorator):
     @staticmethod
-    def init(workspace_name, x_api_key):
-        CodeLighthouseWebHandler.workspace_name = workspace_name
+    def init(organization_name, x_api_key):
+        CodeLighthouseWebHandler.organization_name = organization_name
         CodeLighthouseWebHandler.x_api_key = x_api_key
 
     @staticmethod

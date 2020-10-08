@@ -4,7 +4,7 @@ import json
 
 class CodeLighthouseWebHandler:
     BASE_URL = "https://dev.codelighthouse.io"
-    workspace_name = "\""
+    version = "v1"
     x_api_key = "\""
 
     @staticmethod
