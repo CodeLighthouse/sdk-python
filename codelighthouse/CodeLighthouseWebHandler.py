@@ -5,6 +5,7 @@ import json
 class CodeLighthouseWebHandler:
     BASE_URL = "https://dev.codelighthouse.io"
     version = "v1"
+    organization_name = "\""
     x_api_key = "\""
 
     @staticmethod
@@ -12,7 +13,7 @@ class CodeLighthouseWebHandler:
         headers = {
             "x-api-key": CodeLighthouseWebHandler.x_api_key,
             "Content-Type": "application/json",
-            "organization": "mailreaper"
+            "organization": CodeLighthouseWebHandler.organization_name
         }
 
         data = {
@@ -21,7 +22,7 @@ class CodeLighthouseWebHandler:
             "error": description,
         }
 
-        url = CodeLighthouseWebHandler.BASE_URL + "/error"
+        url = f"{CodeLighthouseWebHandler.BASE_URL}/{CodeLighthouseWebHandler.version}/error"
 
         prepared = requests.Request("POST", url, headers=headers, data=json.dumps(data))
         prepared = prepared.prepare()
