@@ -3,7 +3,7 @@ import json
 
 
 class CodeLighthouseWebHandler:
-    BASE_URL = "https://dev.slackbot.mailreaper.com"
+    BASE_URL = "https://dev.codelighthouse.io"
     workspace_name = "\""
     x_api_key = "\""
 

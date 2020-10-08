@@ -1,6 +1,6 @@
 import functools
 from contextlib import ContextDecorator
-from sdk.CodeLighthouseWebHandler import CodeLighthouseWebHandler
+from codelighthouse.CodeLighthouseWebHandler import CodeLighthouseWebHandler
 
 
 class CodeLighthouse(ContextDecorator):
@@ -18,8 +18,8 @@ class CodeLighthouse(ContextDecorator):
                     return f(*args, **kw)
                 except BaseException as e:
                     CodeLighthouseWebHandler.send_error(title=f"{type(e).__name__} @ {f.__name__}",
-                                                  description=str(e),
-                                                  author=author)
+                                                        description=str(e),
+                                                        author=author)
 
             return _wrapper_inner
 
