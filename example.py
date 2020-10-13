@@ -1,7 +1,8 @@
-from sdk.CodeLighthouse import CodeLighthouse
+from codelighthouse.CodeLighthouse import CodeLighthouse
+import os
 
-CodeLighthouse.init(workspace_name="mailreaper",
-                       x_api_key="NrJ2SrDZWqu4vPIgpbU46AzoR8kpYod02IAenGRo2RfJU_gAgTc9uYiqQFIGABRBYGoFXCXUKqAMwq7qEsnDGg")
+CodeLighthouse.init(organization_name=os.environ.get("ORG_NAME"),
+                    x_api_key=os.environ.get("CODELIGHTHOUSE_SECRET"))
 
 
 @CodeLighthouse.error_catcher(author="hello@codelighthouse.io")
