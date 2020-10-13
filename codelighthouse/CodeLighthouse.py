@@ -10,7 +10,7 @@ class CodeLighthouse(ContextDecorator):
         CodeLighthouseWebHandler.x_api_key = x_api_key
 
     @staticmethod
-    def error_catcher(author: str):
+    def error_catcher(email: str):
         def _wrapper_outer(f):
             @functools.wraps(f)
             def _wrapper_inner(*args, **kw):
@@ -19,7 +19,7 @@ class CodeLighthouse(ContextDecorator):
                 except BaseException as e:
                     CodeLighthouseWebHandler.send_error(title=f"{type(e).__name__} @ {f.__name__}",
                                                         description=str(e),
-                                                        author=author)
+                                                        email=email)
 
             return _wrapper_inner
 
