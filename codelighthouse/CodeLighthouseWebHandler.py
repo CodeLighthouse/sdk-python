@@ -22,3 +22,6 @@ class CodeLighthouseWebHandler:
         prepared = prepared.prepare()
         s = requests.Session()
         r = s.send(prepared)
+        if r.status_code != 200:
+            # integrate logger in the future
+            print(f"CODELIGHTHOUSE: returned status code {r.status_code} || {r.json()['message']}")
