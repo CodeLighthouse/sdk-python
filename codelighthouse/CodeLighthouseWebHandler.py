@@ -7,21 +7,21 @@ class CodeLighthouseWebHandler:
     version = "v1"
     organization_name = "\""
     x_api_key = "\""
+    DEBUG = False
 
-    @staticmethod
-    def send_error(**kwargs) -> None:
+    def send_error(self, *args, **kwargs) -> None:
         headers = {
-            "x-api-key": CodeLighthouseWebHandler.x_api_key,
+            "x-api-key": self.x_api_key,
             "Content-Type": "application/json",
-            "organization": CodeLighthouseWebHandler.organization_name
+            "organization": self.organization_name
         }
 
-        url = f"{CodeLighthouseWebHandler.BASE_URL}/{CodeLighthouseWebHandler.version}/error"
+        url = f"{self.BASE_URL}/{self.version}/error"
 
         prepared = requests.Request("POST", url, headers=headers, data=json.dumps(kwargs))
         prepared = prepared.prepare()
         s = requests.Session()
         r = s.send(prepared)
-        if r.status_code != 200:
+        if r.status_code != 200 or self.DEBUG:
             # integrate logger in the future
             print(f"CODELIGHTHOUSE: returned status code {r.status_code} || {r.json()['message']}")
