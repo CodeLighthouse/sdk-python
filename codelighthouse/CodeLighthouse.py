@@ -10,8 +10,16 @@ class CodeLighthouse(ContextDecorator):
         self.web_handler.organization_name = organization_name
         self.web_handler.x_api_key = x_api_key
 
-    @staticmethod
-    def error_catcher(email: str):
+        if environment == "local":
+            self.web_handler.BASE_URL = "http://localhost:5000"
+            self.web_handler.DEBUG = True
+        elif environment == "dev":
+            self.web_handler.BASE_URL = "https://dev.codelighthouse.io"
+            self.web_handler.DEBUG = True
+        else:
+            self.web_handler.BASE_URL = "https://codelighthouse.io"
+
+    def error_catcher(self, email: str):
         def _wrapper_outer(f):
             @functools.wraps(f)
             def _wrapper_inner(*args, **kw):
