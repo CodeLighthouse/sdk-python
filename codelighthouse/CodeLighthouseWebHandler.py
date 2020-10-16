@@ -9,22 +9,16 @@ class CodeLighthouseWebHandler:
     x_api_key = "\""
 
     @staticmethod
-    def send_error(title: str, description: str, email: str) -> None:
+    def send_error(**kwargs) -> None:
         headers = {
             "x-api-key": CodeLighthouseWebHandler.x_api_key,
             "Content-Type": "application/json",
             "organization": CodeLighthouseWebHandler.organization_name
         }
 
-        data = {
-            "email": email,
-            "error_title": title,
-            "error": description,
-        }
-
         url = f"{CodeLighthouseWebHandler.BASE_URL}/{CodeLighthouseWebHandler.version}/error"
 
-        prepared = requests.Request("POST", url, headers=headers, data=json.dumps(data))
+        prepared = requests.Request("POST", url, headers=headers, data=json.dumps(kwargs))
         prepared = prepared.prepare()
         s = requests.Session()
         r = s.send(prepared)
