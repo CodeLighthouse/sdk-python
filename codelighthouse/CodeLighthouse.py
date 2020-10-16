@@ -27,10 +27,14 @@ class CodeLighthouse(ContextDecorator):
                     return f(*args, **kw)
                 except BaseException as e:
                     arguments = CodeLighthouse.format_arguments(args, kw)
-                    CodeLighthouseWebHandler.send_error(title=f"{type(e).__name__} @ {f.__name__}",
-                                                        description=str(e),
-                                                        email=email,
-                                                        arguments=arguments)
+                    trace = CodeLighthouse.format_stack_trace(e.__traceback__)
+                    traceback_ = e.__traceback__
+                    # for some reason, webhandler requires
+                    self.web_handler.send_error(self.web_handler,
+                                                title=f"{type(e).__name__} @ {f.__name__}",
+                                                description=str(e),
+                                                email=email,
+                                                arguments=arguments)
 
             return _wrapper_inner
 
@@ -53,3 +57,9 @@ class CodeLighthouse(ContextDecorator):
             output[key] = value
 
         return output
+
+    @staticmethod
+    def format_stack_trace(trace):
+        # traceback allows for locals to be found up and down the stack.  Call trace.f_locals for them
+        # print(trace)
+        return
