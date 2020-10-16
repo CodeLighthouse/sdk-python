@@ -4,10 +4,11 @@ from codelighthouse.CodeLighthouseWebHandler import CodeLighthouseWebHandler
 
 
 class CodeLighthouse(ContextDecorator):
-    @staticmethod
-    def init(organization_name, x_api_key):
-        CodeLighthouseWebHandler.organization_name = organization_name
-        CodeLighthouseWebHandler.x_api_key = x_api_key
+    web_handler = CodeLighthouseWebHandler
+
+    def __init__(self, organization_name, x_api_key, environment="prod"):
+        self.web_handler.organization_name = organization_name
+        self.web_handler.x_api_key = x_api_key
 
     @staticmethod
     def error_catcher(email: str):
