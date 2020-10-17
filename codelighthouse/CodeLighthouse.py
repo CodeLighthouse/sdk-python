@@ -31,7 +31,8 @@ class CodeLighthouse(ContextDecorator):
                     traceback_ = e.__traceback__
                     # for some reason, webhandler requires
                     self.web_handler.send_error(self.web_handler,
-                                                title=f"{type(e).__name__} @ {f.__name__}",
+                                                title=type(e).__name__,
+                                                location=f.__name__,
                                                 description=str(e),
                                                 email=email,
                                                 arguments=arguments)
