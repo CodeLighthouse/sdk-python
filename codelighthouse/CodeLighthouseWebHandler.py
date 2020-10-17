@@ -24,4 +24,10 @@ class CodeLighthouseWebHandler:
         r = s.send(prepared)
         if r.status_code != 200 or self.DEBUG:
             # integrate logger in the future
-            print(f"CODELIGHTHOUSE: returned status code {r.status_code} || {r.json()['message']}")
+            try:
+                print(f"CODELIGHTHOUSE: returned status code {r.status_code} || {r.json()['message']}")
+            except json.decoder.JSONDecodeError as e:
+                if self.DEBUG:
+                    print(f"JSON ERROR {e}")
+                else:
+                    print(f"CodeLighthouse 500 JSON error")
