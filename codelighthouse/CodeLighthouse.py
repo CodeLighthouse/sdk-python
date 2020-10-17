@@ -32,7 +32,7 @@ class CodeLighthouse(ContextDecorator):
                     # for some reason, webhandler requires
                     self.web_handler.send_error(self.web_handler,
                                                 title=type(e).__name__,
-                                                location=f.__name__,
+                                                function=f.__name__,
                                                 description=str(e),
                                                 email=email,
                                                 arguments=arguments)
