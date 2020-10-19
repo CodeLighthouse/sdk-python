@@ -5,10 +5,16 @@ from codelighthouse.CodeLighthouseWebHandler import CodeLighthouseWebHandler
 
 class CodeLighthouse(ContextDecorator):
     web_handler = CodeLighthouseWebHandler
+    resource_name = None
+    resource_group = None
 
-    def __init__(self, organization_name, x_api_key, environment="prod"):
+    def __init__(self, organization_name, x_api_key, environment="prod", resource_group: str = None,
+                 resource_name: str = None):
         self.web_handler.organization_name = organization_name
         self.web_handler.x_api_key = x_api_key
+
+        self.resource_group = resource_group
+        self.resource_name = resource_name
 
         if environment == "local":
             self.web_handler.BASE_URL = "http://localhost:5000"
