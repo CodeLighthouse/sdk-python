@@ -34,8 +34,7 @@ class CodeLighthouse(ContextDecorator):
                     return f(*args, **kw)
                 except BaseException as e:
                     arguments = CodeLighthouse.format_arguments(args, kw)
-                    trace = CodeLighthouse.format_stack_trace(e.__traceback__)
-                    traceback_ = e.__traceback__
+                    stack_trace = CodeLighthouse.format_stack_trace(e.__traceback__)
                     # for some reason, requires passing itself
                     self.web_handler.send_error(self.web_handler,
                                                 title=type(e).__name__,
@@ -44,7 +43,8 @@ class CodeLighthouse(ContextDecorator):
                                                 resource_name=self.resource_name,
                                                 description=str(e),
                                                 email=email,
-                                                arguments=arguments)
+                                                arguments=arguments,
+                                                stack_trace=stack_trace)
 
             return CLH_wrapper_inner
 
