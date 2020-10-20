@@ -1,6 +1,7 @@
 import functools
 from contextlib import ContextDecorator
 from codelighthouse.CodeLighthouseWebHandler import CodeLighthouseWebHandler
+import traceback
 
 
 class CodeLighthouse(ContextDecorator):
@@ -70,5 +71,15 @@ class CodeLighthouse(ContextDecorator):
     @staticmethod
     def format_stack_trace(trace):
         # traceback allows for locals to be found up and down the stack.  Call trace.f_locals for them
-        # print(trace)
-        return
+        output = []
+        for item in traceback.extract_stack(trace.tb_frame):
+            if item.name == "CLH_wrapper_inner":
+                continue
+            data = {
+                "file": item.filename,
+                "line": item.line,
+                "lineno": item.lineno,
+                "function": item.name
+            }
+            output.append(data)
+        return output
