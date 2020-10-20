@@ -1,10 +1,14 @@
-from sdk.CodeLighthouse import CodeLighthouse
+from codelighthouse.CodeLighthouse import CodeLighthouse
+import os
 
-CodeLighthouse.init(workspace_name="mailreaper",
-                       x_api_key="NrJ2SrDZWqu4vPIgpbU46AzoR8kpYod02IAenGRo2RfJU_gAgTc9uYiqQFIGABRBYGoFXCXUKqAMwq7qEsnDGg")
+lighthouse = CodeLighthouse(organization_name=os.environ.get("ORG_NAME"),
+                            x_api_key=os.environ.get("CODELIGHTHOUSE_SECRET"),
+                            environment="local",
+                            resource_group="LOCAL",
+                            resource_name="CodeLighthouseSDK")
 
 
-@CodeLighthouse.error_catcher(author="hello@codelighthouse.io")
+@lighthouse.error_catcher(email="kyle@codelighthouse.io")
 def broken_function():
     not_a_dictionary = 1
     not_a_dictionary.append("HELLO")
