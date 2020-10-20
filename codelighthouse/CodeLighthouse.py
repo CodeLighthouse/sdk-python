@@ -26,9 +26,9 @@ class CodeLighthouse(ContextDecorator):
             self.web_handler.BASE_URL = "https://codelighthouse.io"
 
     def error_catcher(self, email: str):
-        def _wrapper_outer(f):
+        def CLH_wrapper_outer(f):
             @functools.wraps(f)
-            def _wrapper_inner(*args, **kw):
+            def CLH_wrapper_inner(*args, **kw):
                 try:
                     return f(*args, **kw)
                 except BaseException as e:
@@ -45,9 +45,9 @@ class CodeLighthouse(ContextDecorator):
                                                 email=email,
                                                 arguments=arguments)
 
-            return _wrapper_inner
+            return CLH_wrapper_inner
 
-        return _wrapper_outer
+        return CLH_wrapper_outer
 
     @staticmethod
     def format_arguments(args, kwargs):
