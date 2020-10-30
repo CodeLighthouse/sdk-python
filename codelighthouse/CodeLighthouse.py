@@ -8,14 +8,16 @@ class CodeLighthouse(ContextDecorator):
     web_handler = CodeLighthouseWebHandler
     resource_name = None
     resource_group = None
+    github_repo = None
 
     def __init__(self, organization_name, x_api_key, environment="prod", resource_group: str = None,
-                 resource_name: str = None):
+                 resource_name: str = None, github_repo: str = None):
         self.web_handler.organization_name = organization_name
         self.web_handler.x_api_key = x_api_key
 
         self.resource_group = resource_group
         self.resource_name = resource_name
+        self.github_repo = github_repo
 
         if environment == "local":
             self.web_handler.BASE_URL = "http://localhost:5000"
@@ -37,14 +39,15 @@ class CodeLighthouse(ContextDecorator):
                     stack_trace = CodeLighthouse.format_stack_trace(e.__traceback__)
                     # for some reason, requires passing itself
                     self.web_handler.send_error(self.web_handler,
-                                                title=type(e).__name__,
+                                                error_type=type(e).__name__,
                                                 function=f.__name__,
                                                 resource_group=self.resource_group,
                                                 resource_name=self.resource_name,
                                                 description=str(e),
                                                 email=email,
                                                 arguments=arguments,
-                                                stack_trace=stack_trace)
+                                                stack_trace=stack_trace,
+                                                github_repo=self.github_repo)
 
             return CLH_wrapper_inner
 

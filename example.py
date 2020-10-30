@@ -5,7 +5,8 @@ lighthouse = CodeLighthouse(organization_name=os.environ.get("ORG_NAME"),
                             x_api_key=os.environ.get("CODELIGHTHOUSE_SECRET"),
                             environment="local",
                             resource_group="LOCAL",
-                            resource_name="CodeLighthouseSDK")
+                            resource_name="CodeLighthouseSDK",
+                            github_repo="KnapsackAnalysis")
 
 
 @lighthouse.error_catcher(email="kyle@codelighthouse.io")
