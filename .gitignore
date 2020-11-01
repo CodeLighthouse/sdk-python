@@ -2,3 +2,9 @@
 .idea/
 
 *.pyc
+
+CodeLighthouse.egg-info/
+
+dist/
+
+build/
