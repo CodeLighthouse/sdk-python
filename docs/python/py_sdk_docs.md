@@ -86,7 +86,7 @@ def some_function():
 You can invite additional users to your organization in your admin panel on the [user management page](https://codelighthouse.io/admin/users). Note that each payment plan only comes with a fixed number of users, and that adding additional users past that number will cost more. Please refer to our [pricing guide](https://codelighthouse.io/#pricing) for more information.
 
 ## A Complete Example
-CodeLighthouse's SDK is built with pure python, and it isn't dependend on any frameworks like Flask or Django. The example below uses flask to illustrate a common application of our SDK. 
+CodeLighthouse's SDK is built with pure python and will work with any native python framework. The example below uses flask to illustrate a common application of our SDK. 
 
 ```python
 # IMPORTS
