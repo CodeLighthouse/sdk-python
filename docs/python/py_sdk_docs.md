@@ -22,18 +22,6 @@ If you're using pip for dependency management, once you install CodeLighthouse, 
 pip freeze > requirements.txt
 ```
 
-### 2. Cloning from GitHub
-Our open-source SDK is available on GitHub [here](https://github.com/codelighthouse/sdk-python). You can follow the following instructions to clone it:
-1. Enter the directory you want to install the SDK to
-2. Run the following:
-    ```bash
-    git clone https://github.com/codelighthouse/sdk-python.git
-    ```
-3. Enter the cloned project and install dependencies with pip:
-    ```bash
-    cd sdk-python
-    pip install -r requirements.txt
-    ```
 ## Configuring the SDK
 Once you have installed the SDK, you need to import and configure it. Configuring the SDK requires signing up an account at [codelighthouse.io](https://codelighthouse.io). Using CodeLighthouse for a small or personal project? No worries, we offer a [free tier](https://codelighthouse.io/#pricing) subscription!
 
