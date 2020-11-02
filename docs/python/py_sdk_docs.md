@@ -122,8 +122,3 @@ def hello_name(name):
 
 app.run()
 ```
-
-
-
-
-
