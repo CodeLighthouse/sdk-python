@@ -39,7 +39,7 @@ class CodeLighthouse(ContextDecorator):
                     stack_trace = CodeLighthouse.format_stack_trace(e.__traceback__)
                     # for some reason, requires passing itself
                     self.web_handler.send_error(self.web_handler,
-                                                error_type=type(e).__name__,
+                                                title=type(e).__name__,
                                                 function=f.__name__,
                                                 resource_group=self.resource_group,
                                                 resource_name=self.resource_name,
