@@ -13,7 +13,8 @@ class CodeLighthouseWebHandler:
         headers = {
             "x-api-key": self.x_api_key,
             "Content-Type": "application/json",
-            "organization": self.organization_name
+            "organization": self.organization_name,
+            "User-Agent": "CodeLighthouse"
         }
 
         url = f"{self.BASE_URL}/{self.version}/error"
