@@ -32,9 +32,8 @@ The CodeLighthouse SDK has several configuration options that provide for curren
 |-------------------------|------------------------------------------------|-----------|
 |`organization_name`      |The name of your organization when you signed up| yes       |
 |`x_api_key`              |Your organization's API Key                     | yes       |
-|`resource_name`          | The name of the resource you are embedding the SDK into| no|
+|`resource_name`          |The name of the resource you are embedding the SDK into| no|
 |`resource_group`         |The group of resources that the resource you are embedding the SDK into belongs to| no |
-|`github_repo`            | The github repository for this project to add issues to|no|
 
 #### Mandatory Options
 These options are required for your SDK to successfully authenticate to our server and to function properly.
@@ -47,9 +46,6 @@ The following options are used for organizing your resources and their errors. T
 * `resource_name` - The name of the resource that your code belongs to. This is used for tracking errors when you are using CodeLighthouse in multiple different projects or resources. This value is included in the error notifications you receive so that you know where the error ocurred. We also anticipate allowing you to filter your error feed by resource name, as well as offering error analytics and visualizations on a per-resource basis in the near future. 
 * `resource group` - the name of the group or resources that this resource belongs to. Similar to `resource_name`, this is used for tracking errorss, and is included in the error notifications you receive. We expect to be able to allow you to filter and visualize errors on a per-`resource_group` basis as well. 
 
-The following options allow you to configure other information about the resource that you are embedding the SDK in.
-* `github_repo` - This value allows you to specify the name of the GitHub repository that this code belongs to. When new types of errors occur, the SDK will automatically create issues in your repository. For this to work, you must configure your organization's GitHub integration in your CodeLighthouse Administrator Dashboard's [organization](https://codelighthouse.io/admin/organization) page. 
-
 ### Configuration Example
 ```python
 # IMPORT CODELIGHTHOUSE
@@ -61,8 +57,7 @@ lighthouse = CodeLighthouse(
     organization_name="CodeLighthouse, LLC",
     x_api_key="your API Key",
     resource_group="serverless-applications",
-    resource_name="notifications-app",
-    github_repo="notifications_app"
+    resource_name="notifications-app"
 )
 ```
 
@@ -97,8 +92,7 @@ lighthouse = CodeLighthouse(
     organization_name="CodeLighthouse, LLC",
     x_api_key=os.environ.get("CODELIGHTHOUSE_API_KEY"),
     resource_group="serverless-applications",
-    resource_name="notifications-app",
-    github_repo="notifications_app"
+    resource_name="notifications-app"
 )
 
 # CREATE YOUR APP
