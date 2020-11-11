@@ -45,7 +45,7 @@ These options are required for your SDK to successfully authenticate to our serv
 The following options are used for organizing your resources and their errors. The specified values for each will be included in your error notifications. When a function in a resource encounters an error, the code owner will be notified of the resource group, resource name, environment, and function name where the error ocurred. We anticipate being able to filter errors and visualizations on the basis of these options in the near future.
 
 * `resource_name` - The name of the resource that your code belongs to. This is used for tracking errors when you are using CodeLighthouse in multiple different projects or resources. This value is included in the error notifications you receive so that you know where the error ocurred. We also anticipate allowing you to filter your error feed by resource name, as well as offering error analytics and visualizations on a per-resource basis in the near future. 
-* `resource group` - the name of the group or resources that this resource belongs to. Similar to `resource_name`, this is used for tracking errorss, and is included in the error notifications you receive. We expect to be able to allow you to filter and visualize errors on a per-`resource_group` basis as well. 
+* `resource group` - the name of the group or resources that this resource belongs to. Similar to `resource_name`, this is used for tracking errors, and is included in the error notifications you receive. We expect to be able to allow you to filter and visualize errors on a per-`resource_group` basis as well. 
 
 The following options allow you to configure other information about the resource that you are embedding the SDK in.
 * `github_repo` - This value allows you to specify the name of the GitHub repository that this code belongs to. When new types of errors occur, the SDK will automatically create issues in your repository. For this to work, you must configure your organization's GitHub integration in your CodeLighthouse Administrator Dashboard's [organization](https://codelighthouse.io/admin/organization) page. 
@@ -71,7 +71,8 @@ Once you have configured the SDK, it's super easy to use! Simply use the CodeLig
 
 ### Using the Error Catcher Decorator
 Each decorator only applies to the one function defined directly below it. In the decorator, specify the email address of the user in your organization who should receive the notification. 
-
+Note that for frameworks like Flask that use decorators to denote a route, the Codelighthouse `error_catcher` decorator 
+**must** be the innermost decorator!
 ```python
 @lighthouse.error_catcher(email="example@codelighthouse.io")
 def some_function():
@@ -81,6 +82,8 @@ def some_function():
 
 ### Adding Additional Users
 You can invite additional users to your organization in your admin panel on the [user management page](https://codelighthouse.io/admin/users). Note that each payment plan only comes with a fixed number of users, and that adding additional users past that number will cost more. Please refer to our [pricing guide](https://codelighthouse.io/#pricing) for more information.
+Once you've invited users, you can use their email addresses in decorators to assign them as code owners, and notifications
+will be sent to them.
 
 ## A Complete Example
 CodeLighthouse's SDK is built with pure python and will work with any native python framework. The example below uses flask to illustrate a common application of our SDK. 
@@ -106,13 +109,13 @@ app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
 # ADD THE CODELIGHTHOUSE error_catcher DECORATOR TO FUNCTIONS
-@lighthouse.error_catcher(email='user1@codelighthouse.io')
 @app.route('/')
+@lighthouse.error_catcher(email='user1@codelighthouse.io')
 def say_hello():
     return "Hello, World! Real-time error notifications brought to you by CodeLighthouse"
 
-@lighthouse.error_catcher(email='user2@codelighthouse.io')
 @app.route('/<name>')
+@lighthouse.error_catcher(email='user2@codelighthouse.io')
 def hello_name(name):
     return f'Hello, {name}! '
 
