@@ -7,7 +7,7 @@ tags: [python, sdk]
 Welcome to CodeLighthouse's official documentation for our Python SDK! If you're looking for guidance on how to install, configure, and/or integrate our SDK into your code, you're in the right place! 
 
 ## Installing the SDK
-The CodeLighthouse SDK is published on [PyPi](https://pypi.org/), the Python package index. 
+The CodeLighthouse SDK is published on [PyPi](https://pypi.org/project/CodeLighthouse/), the Python package index. 
 
 ### Installing with Pip
 Installing the SDK with pip couldn't be easier! 
