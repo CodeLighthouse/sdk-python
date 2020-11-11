@@ -13,7 +13,8 @@ class CodeLighthouseWebHandler:
         headers = {
             "x-api-key": self.x_api_key,
             "Content-Type": "application/json",
-            "organization": self.organization_name
+            "organization": self.organization_name,
+            "User-Agent": "CodeLighthouse"
         }
 
         url = f"{self.BASE_URL}/{self.version}/error"
@@ -25,7 +26,8 @@ class CodeLighthouseWebHandler:
         if r.status_code != 200 or self.DEBUG:
             # integrate logger in the future
             try:
-                print(f"CODELIGHTHOUSE: returned status code {r.status_code} || {r.json()['message']}")
+                print(f"CODELIGHTHOUSE: returned status code {r.status_code}")
+                print(f'CODELIGHTHOUSE: returned message {r.json()["message"]}')
             except json.decoder.JSONDecodeError as e:
                 if self.DEBUG:
                     print(f"JSON ERROR {e}")
