@@ -49,7 +49,7 @@ The following options are used for organizing your resources and their errors. T
 ### Configuration Example
 ```python
 # IMPORT CODELIGHTHOUSE
-from codelighthouse.CodeLighthouse import CodeLighthouse
+from codelighthouse import CodeLighthouse
 import os
 
 # INSTANTIATE THE ERROR CATCHER
@@ -74,6 +74,9 @@ def some_function():
   print("Did something!")
 ```
 
+It's important to note that some frameworks like Flask provide decorators that include error catchers as well.
+A common example would be Flask's `@app.route()` decorator. For our error catcher to work properly, it is important that 
+you include our decorator "inside of" other decorators that do this. An example is provided at the bottom of this page.
 ### Adding Additional Users
 You can invite additional users to your organization in your admin panel on the [user management page](https://codelighthouse.io/admin/users). Note that each payment plan only comes with a fixed number of users, and that adding additional users past that number will cost more. Please refer to our [pricing guide](https://codelighthouse.io/#pricing) for more information.
 
@@ -82,9 +85,8 @@ CodeLighthouse's SDK is built with pure python and will work with any native pyt
 
 ```python
 # IMPORTS
-import os
 from flask import Flask
-from codelighthouse.CodeLighthouse import CodeLighthouse
+from codelighthouse import CodeLighthouse
 import os
 
 # CONFIGURE THE SDK
@@ -97,16 +99,16 @@ lighthouse = CodeLighthouse(
 
 # CREATE YOUR APP
 app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
 
 # ADD THE CODELIGHTHOUSE error_catcher DECORATOR TO FUNCTIONS
-@lighthouse.error_catcher(email='user1@codelighthouse.io')
 @app.route('/')
+@lighthouse.error_catcher(email='user1@codelighthouse.io')
 def say_hello():
     return "Hello, World! Real-time error notifications brought to you by CodeLighthouse"
 
-@lighthouse.error_catcher(email='user2@codelighthouse.io')
+
 @app.route('/<name>')
+@lighthouse.error_catcher(email='user2@codelighthouse.io')
 def hello_name(name):
     return f'Hello, {name}! '
 
