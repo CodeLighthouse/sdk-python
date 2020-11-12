@@ -1,4 +1,4 @@
-from codelighthouse.CodeLighthouse import CodeLighthouse
+from codelighthouse import CodeLighthouse
 import os
 
 lighthouse = CodeLighthouse(organization_name=os.environ.get("ORG_NAME"),
