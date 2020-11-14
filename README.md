@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/codelighthouse/sdk-python/badge)](https://www.codefactor.io/repository/github/codelighthouse/sdk-python)
+
 # CodeLighthouse Python SDK
 
 Quick Links |
