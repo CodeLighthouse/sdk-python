@@ -82,7 +82,7 @@ def some_function():
 
 ### Adding Additional Users
 You can invite additional users to your organization in your admin panel on the [user management page](https://codelighthouse.io/admin/users). Note that each payment plan only comes with a fixed number of users, and that adding additional users past that number will cost more. Please refer to our [pricing guide](https://codelighthouse.io/#pricing) for more information.
-Once you've invited users, you can use their email addresses in decorators to assign them as code owners, and notifications
+Once your users have accepted their invites, you can use their email addresses in decorators to assign them as code owners, and notifications
 will be sent to them.
 
 ## A Complete Example
