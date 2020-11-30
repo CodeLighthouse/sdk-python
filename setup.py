@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="CodeLighthouse",
-    version="1.0.2",
+    version="1.0.3",
     author="CodeLighthouse",
     author_email="hello@codelighthouse.io",
     description="The python SDK for CodeLighthouse",
