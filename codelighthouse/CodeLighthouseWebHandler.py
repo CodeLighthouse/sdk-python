@@ -28,6 +28,8 @@ class CodeLighthouseWebHandler:
             print(f"CODELIGHTHOUSE: returned status code {r.status_code}")
             if r.status_code != 200:
                 print(f'CODELIGHTHOUSE: returned message {r.json()["message"]}')
+            else:
+                print(f"CODELIGHTHOUSE: error_guid={r.json().get('error_guid')}")
         except json.decoder.JSONDecodeError as e:
             if self.DEBUG:
                 print(f"JSON ERROR {e}")
