@@ -9,8 +9,9 @@ class CodeLighthouse(ContextDecorator):
     resource_name = None
     resource_group = None
     github_repo = None
+    default_email = None
 
-    def __init__(self, organization_name, x_api_key, environment="prod", resource_group: str = None,
+    def __init__(self, organization_name, x_api_key, default_email, environment="prod", resource_group: str = None,
                  resource_name: str = None, github_repo: str = None):
         self.web_handler.organization_name = organization_name
         self.web_handler.x_api_key = x_api_key
@@ -18,6 +19,7 @@ class CodeLighthouse(ContextDecorator):
         self.resource_group = resource_group
         self.resource_name = resource_name
         self.github_repo = github_repo
+        self.default_email = default_email
 
         if environment == "local":
             self.web_handler.BASE_URL = "http://localhost:5000"
