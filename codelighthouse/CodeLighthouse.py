@@ -37,12 +37,12 @@ class CodeLighthouse(ContextDecorator):
                 try:
                     return f(*args, **kw)
                 except BaseException as e:
-                    arguments = CodeLighthouse.format_arguments(args, kw)
-                    stack_trace = CodeLighthouse.format_stack_trace(e.__traceback__)
-                    # for some reason, requires passing itself
-                    self.web_handler.send_error(self.web_handler,
+                    self.send_error(e, email, args, kw)
 
-        the global default
+            return CLH_wrapper_inner
+
+        return CLH_wrapper_outer
+
     def send_error(self, exception, email=None, args=None, kwargs=None):
         """
         This prepares the exception for our server.  You can optionally pass an email for a specific developer or use
