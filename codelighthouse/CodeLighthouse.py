@@ -66,10 +66,12 @@ class CodeLighthouse(ContextDecorator):
         """
         output = {"args": []}
 
-        for arg in args:
-            output["args"].append(arg)
-        for key, value in kwargs.items():
-            output[key] = value
+        if args:
+            for arg in args:
+                output["args"].append(arg)
+        if kwargs:
+            for key, value in kwargs.items():
+                output[key] = value
 
         return output
 
