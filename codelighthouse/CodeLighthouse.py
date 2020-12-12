@@ -2,6 +2,8 @@ import functools
 from contextlib import ContextDecorator
 from codelighthouse.CodeLighthouseWebHandler import CodeLighthouseWebHandler
 import traceback
+import sys
+import threading
 
 
 class CodeLighthouse(ContextDecorator):
@@ -10,8 +12,12 @@ class CodeLighthouse(ContextDecorator):
     resource_group = None
     github_repo = None
     default_email = None
+    sys_excepthook = None
+    threading_excepthook = None
+    send_uncaught_exceptions = True
 
-    def __init__(self, organization_name, x_api_key, default_email, environment="prod", resource_group: str = None,
+    def __init__(self, organization_name, x_api_key, default_email, send_uncaught_exceptions=True,
+                 environment="prod", resource_group: str = None,
                  resource_name: str = None, github_repo: str = None):
         self.web_handler.organization_name = organization_name
         self.web_handler.x_api_key = x_api_key
@@ -20,6 +26,10 @@ class CodeLighthouse(ContextDecorator):
         self.resource_name = resource_name
         self.github_repo = github_repo
         self.default_email = default_email
+        self.send_uncaught_exceptions = send_uncaught_exceptions
+
+        if self.send_uncaught_exceptions:
+            self.install_sys_hook()
 
         if environment == "local":
             self.web_handler.BASE_URL = "http://localhost:5000"
@@ -75,6 +85,52 @@ class CodeLighthouse(ContextDecorator):
 
         # IF WEB_HANDLER ERRORS OUT, IT RETURNS NONE
         return guid
+
+    def excepthook(self, exc_type, exc_value, traceback):
+        if self.send_uncaught_exceptions:
+            self.error(exc_value)
+
+    def install_sys_hook(self):
+        self.send_uncaught_exceptions = True
+
+        self.sys_excepthook = sys.excepthook
+
+        def excepthook(*exc_info):
+            print(*exc_info)
+            self.excepthook(*exc_info)
+
+            if self.sys_excepthook:
+                self.sys_excepthook(*exc_info)
+
+        sys.excepthook = excepthook
+        sys.excepthook.codelighthouse_client = self
+
+        if hasattr(threading, 'excepthook'):
+            self.threading_excepthook = threading.excepthook
+
+            def threadhook(args):
+                self.excepthook(args[0], args[1], args[2])
+
+                if self.threading_excepthook:
+                    self.threading_excepthook(args)
+
+            threading.excepthook = threadhook
+            threading.excepthook.codelighthouse_client = self
+
+    def uninstall_sys_hook(self):
+        self.send_uncaught_exceptions = False
+
+        client = getattr(sys.excepthook, 'codelighthouse_client', None)
+
+        if client is self:
+            sys.excepthook = self.sys_excepthook
+            self.sys_excepthook = None
+
+        if hasattr(threading, 'excepthook'):
+            client = getattr(threading.excepthook, 'codelighthouse_client', None)
+            if client is self:
+                threading.excepthook = self.threading_excepthook
+                self.threading_excepthook = None
 
     @staticmethod
     def format_arguments(args, kwargs):
