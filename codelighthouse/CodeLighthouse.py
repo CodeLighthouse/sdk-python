@@ -5,7 +5,7 @@ import traceback
 
 
 class CodeLighthouse(ContextDecorator):
-    web_handler = CodeLighthouseWebHandler
+    web_handler = CodeLighthouseWebHandler()
     resource_name = None
     resource_group = None
     github_repo = None
@@ -61,8 +61,7 @@ class CodeLighthouse(ContextDecorator):
             email = self.default_email
 
         # for some reason, requires passing itself
-        self.web_handler.send_error(self.web_handler,
-                                    error_type=type(exception).__name__,
+        self.web_handler.send_error(error_type=type(exception).__name__,
                                     function=stack_trace[0]["function"],
                                     resource_group=self.resource_group,
                                     resource_name=self.resource_name,
