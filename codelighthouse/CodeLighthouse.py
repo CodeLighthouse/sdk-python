@@ -37,16 +37,16 @@ class CodeLighthouse(ContextDecorator):
                 try:
                     return f(*args, **kw)
                 except BaseException as e:
-                    self.send_error(e, email, args, kw)
+                    self.error(e, email, args, kw)
 
             return CLH_wrapper_inner
 
         return CLH_wrapper_outer
 
-    def send_error(self, exception, email=None, args=None, kwargs=None):
+    def error(self, exception, email=None, args=None, kwargs=None):
         """
         This prepares the exception for our server.  You can optionally pass an email for a specific developer or use
-        the global default
+        the global default.
 
         :param exception: the exception itself.  (e in `except ValueError as e:`)
         :param email: the email of the developer you want to notify.
