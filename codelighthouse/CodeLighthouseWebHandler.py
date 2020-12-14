@@ -9,7 +9,7 @@ class CodeLighthouseWebHandler:
     x_api_key = "\""
     DEBUG = False
 
-    def send_error(self, *args, **kwargs) -> None:
+    def send_error(self, *args, **kwargs):
         headers = {
             "x-api-key": self.x_api_key,
             "Content-Type": "application/json",
@@ -30,6 +30,7 @@ class CodeLighthouseWebHandler:
                 print(f'CODELIGHTHOUSE: returned message {r.json()["message"]}')
             else:
                 print(f"CODELIGHTHOUSE: error_guid={r.json().get('error_guid')}")
+                return r.json().get('error_guid')
         except json.decoder.JSONDecodeError as e:
             if self.DEBUG:
                 print(f"JSON ERROR {e}")
