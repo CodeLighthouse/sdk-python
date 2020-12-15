@@ -104,7 +104,7 @@ def some_function():
 ```
 
 <!-- theme: warning -->
-> ### Decorators and Web Frameworks
+> #### Decorators and Web Frameworks
 > 
 > Note that the CodeLighthouse decorator must be inside of decorators used for web framework routing (Flask, Pyramid). 
 > Alternatively, using `app.add_url_rule()` instead of the `@app.route()` decorator will work for Flask apps and 
