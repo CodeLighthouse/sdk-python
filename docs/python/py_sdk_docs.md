@@ -38,8 +38,7 @@ extensibility.
 |`organization_name`      |The name of your organization when you signed up| yes       |
 |`x_api_key`              |Your organization's API Key                     | yes       |
 |`default_email`          |The default email for notifications to be sent to | yes     |
-|`send_uncaught_exceptions` | A boolean value.  Tells the application whether or not to send uncaught exceptions to 
-    CodeLighthouse.  Default of `True` | no |
+|`send_uncaught_exceptions` | A boolean value.  Tells the application whether or not to send uncaught exceptions to CodeLighthouse.  Default of `True` | no |
 |`resource_name`          |The name of the resource you are embedding the SDK into| no|
 |`resource_group`         |The group of resources that the resource you are embedding the SDK into belongs to| no |
 
