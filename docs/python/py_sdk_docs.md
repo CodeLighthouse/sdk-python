@@ -43,7 +43,7 @@ extensibility.
 |`resource_name`          |The name of the resource you are embedding the SDK into| no|
 |`resource_group`         |The group of resources that the resource you are embedding the SDK into belongs to| no |
 
-#### Mandatory Options
+#### Required Parameters
 These options are required for your SDK to successfully authenticate to our server and to function properly.
 * `organization_name`  - The name of your organization. After you sign up, this can be found in your 
 [CodeLighthouse Admin Dashboard](https://codelighthouse.io/admin) on the 
@@ -54,7 +54,7 @@ your [CodeLighthouse Admin Dashboard](https://codelighthouse.io/admin) on the
 [organization](https://codelighthouse.io/admin/organization) page. We recommend copying and pasting this value into the 
 SDK to prevent typos.
 
-#### Optional Options
+#### Optional Parameters
 The following options are used for organizing your resources and their errors. The specified values for each will be 
 included in your error notifications. When a function in a resource encounters an error, the code owner will be 
 notified of the resource group, resource name, environment, and function name where the error ocurred. We anticipate 
