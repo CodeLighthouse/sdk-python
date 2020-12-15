@@ -37,10 +37,12 @@ extensibility.
 |-------------------------|------------------------------------------------|-----------|
 |`organization_name`      |The name of your organization when you signed up| yes       |
 |`x_api_key`              |Your organization's API Key                     | yes       |
+|`default_email`          |The default email for notifications to be sent to | yes     |
+|`send_uncaught_exceptions` | Whether or not you want CodeLighthouse to notify you of uncaught exceptions | no |
 |`resource_name`          |The name of the resource you are embedding the SDK into| no|
 |`resource_group`         |The group of resources that the resource you are embedding the SDK into belongs to| no |
 
-#### Mandatory Options
+#### Required Parameters
 These options are required for your SDK to successfully authenticate to our server and to function properly.
 * `organization_name`  - The name of your organization. After you sign up, this can be found in your 
 [CodeLighthouse Admin Dashboard](https://codelighthouse.io/admin) on the 
@@ -50,13 +52,18 @@ SDK to prevent typos.
 your [CodeLighthouse Admin Dashboard](https://codelighthouse.io/admin) on the 
 [organization](https://codelighthouse.io/admin/organization) page. We recommend copying and pasting this value into the 
 SDK to prevent typos.
+* `default_email` - This is the default email that your notifications will be sent to unless otherwise specified (with 
+a decorator or as a parameter in `lighthouse.error()`)
 
-#### Optional Options
+#### Optional Parameters
 The following options are used for organizing your resources and their errors. The specified values for each will be 
 included in your error notifications. When a function in a resource encounters an error, the code owner will be 
 notified of the resource group, resource name, environment, and function name where the error ocurred. We anticipate 
 being able to filter errors and visualizations on the basis of these options in the near future.
 
+* `send_uncaught_exceptions` - A boolean value.  Tells the application whether or not to send uncaught exceptions to 
+CodeLighthouse.  This defaults to `True`.  There is a small amount of overhead on instantiation and when errors occur 
+but otherwise this will not affect your application.
 * `resource_name` - The name of the resource that your code belongs to. This is used for tracking errors when you are 
 using CodeLighthouse in multiple different projects or resources. This value is included in the error notifications you 
 receive so that you know where the error ocurred. We also anticipate allowing you to filter your error feed by resource 
@@ -75,6 +82,7 @@ import os
 lighthouse = CodeLighthouse(
     organization_name="CodeLighthouse, LLC",
     x_api_key="your API Key",
+    default_email="hello@codelighthouse.io",
     resource_group="serverless-applications",
     resource_name="notifications-app"
 )
@@ -89,18 +97,33 @@ Each decorator only applies to the one function defined directly below it. In th
 of the user in your organization who should receive the notification. 
 
 ```python
-@lighthouse.error_catcher(email="example@codelighthouse.io")
+@lighthouse.error_catcher(email="alice@codelighthouse.io")
 def some_function():
   do_some_thing()
   print("Did something!")
 ```
 
 <!-- theme: warning -->
-### Decorators and Web Frameworks
+> #### Decorators and Web Frameworks
+> 
+> Note that the CodeLighthouse decorator must be inside of decorators used for web framework routing (Flask, Pyramid). 
+> Alternatively, using `app.add_url_rule()` instead of the `@app.route()` decorator will work for Flask apps and 
+> blueprints.
 
-Note that the CodeLighthouse decorator must be inside of decorators used for web framework routing (Flask, Pyramid). 
-Alternatively, using `app.add_url_rule()` instead of the `@app.route()` decorator will work for Flask apps and 
-blueprints.
+### Sending Errors Manually
+
+Throughout your application, you probably already have some code that is handling errors as they come in.  If you want 
+CodeLighthouse to know about those, you can pass them by calling `lighthouse.error(exception)` and passing it the 
+exception and optionally an email for a user in your organization as well.  This allows CodeLighthouse to continue to 
+help your developers understand their code even if it isn't a mission critical situation.
+
+```python
+def some_function():
+    try:
+        call_a_broken_function()
+    except NameError as e:
+        lighthouse.error(e, email="bob@codelighthouse.io")
+```
 
 ### Adding Additional Users
 You can invite additional users to your organization in your admin panel on the 
@@ -131,15 +154,19 @@ app = Flask(__name__)
 
 # ADD THE CODELIGHTHOUSE error_catcher DECORATOR TO FUNCTIONS
 @app.route('/')
-@lighthouse.error_catcher(email='user1@codelighthouse.io')
+@lighthouse.error_catcher(email='alice@codelighthouse.io')
 def say_hello():
     return "Hello, World! Real-time error notifications brought to you by CodeLighthouse"
 
 
 @app.route('/<name>')
-@lighthouse.error_catcher(email='user2@codelighthouse.io')
+@lighthouse.error_catcher(email='bob@codelighthouse.io')
 def hello_name(name):
-    return f'Hello, {name}! '
+    try:
+        return f'Hello, {name}! '
+    except NameError as e:
+        lighthouse.error(e, email="alice@codelighthouse.io")
+        return "This error was handled by CodeLighthouse"
 
 app.run()
 ```

@@ -3,7 +3,7 @@ import os
 
 lighthouse = CodeLighthouse(organization_name=os.environ.get("ORG_NAME"),
                             x_api_key=os.environ.get("CODELIGHTHOUSE_SECRET"),
-                            resource_group="AWS EC2s",
+                            default_email="hello@codelighthouse.io",
                             resource_name="application core"
                             )
 
