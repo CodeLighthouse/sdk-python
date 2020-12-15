@@ -38,7 +38,7 @@ extensibility.
 |`organization_name`      |The name of your organization when you signed up| yes       |
 |`x_api_key`              |Your organization's API Key                     | yes       |
 |`default_email`          |The default email for notifications to be sent to | yes     |
-|`send_uncaught_exceptions` | A boolean value.  Tells the application whether or not to send uncaught exceptions to CodeLighthouse.  Default of `True` | no |
+|`send_uncaught_exceptions` | Whether or not you want CodeLighthouse to notify you of uncaught exceptions | no |
 |`resource_name`          |The name of the resource you are embedding the SDK into| no|
 |`resource_group`         |The group of resources that the resource you are embedding the SDK into belongs to| no |
 
@@ -52,6 +52,8 @@ SDK to prevent typos.
 your [CodeLighthouse Admin Dashboard](https://codelighthouse.io/admin) on the 
 [organization](https://codelighthouse.io/admin/organization) page. We recommend copying and pasting this value into the 
 SDK to prevent typos.
+* `default_email` - This is the default email that your notifications will be sent to unless otherwise specified (with 
+a decorator or as a parameter in `lighthouse.error()`)
 
 #### Optional Parameters
 The following options are used for organizing your resources and their errors. The specified values for each will be 
@@ -59,6 +61,9 @@ included in your error notifications. When a function in a resource encounters a
 notified of the resource group, resource name, environment, and function name where the error ocurred. We anticipate 
 being able to filter errors and visualizations on the basis of these options in the near future.
 
+* `send_uncaught_exceptions` - A boolean value.  Tells the application whether or not to send uncaught exceptions to 
+CodeLighthouse.  This defaults to `True`.  There is a small amount of overhead on instantiation and when errors occur 
+but otherwise this will not affect your application.
 * `resource_name` - The name of the resource that your code belongs to. This is used for tracking errors when you are 
 using CodeLighthouse in multiple different projects or resources. This value is included in the error notifications you 
 receive so that you know where the error ocurred. We also anticipate allowing you to filter your error feed by resource 
