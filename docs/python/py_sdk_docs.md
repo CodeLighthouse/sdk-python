@@ -37,6 +37,9 @@ extensibility.
 |-------------------------|------------------------------------------------|-----------|
 |`organization_name`      |The name of your organization when you signed up| yes       |
 |`x_api_key`              |Your organization's API Key                     | yes       |
+|`default_email`          |The default email for notifications to be sent to | yes     |
+|`send_uncaught_exceptions` | A boolean value.  Tells the application whether or not to send uncaught exceptions to 
+    CodeLighthouse.  Default of `True` | no |
 |`resource_name`          |The name of the resource you are embedding the SDK into| no|
 |`resource_group`         |The group of resources that the resource you are embedding the SDK into belongs to| no |
 
@@ -75,6 +78,7 @@ import os
 lighthouse = CodeLighthouse(
     organization_name="CodeLighthouse, LLC",
     x_api_key="your API Key",
+    default_email="hello@codelighthouse.io",
     resource_group="serverless-applications",
     resource_name="notifications-app"
 )
@@ -89,7 +93,7 @@ Each decorator only applies to the one function defined directly below it. In th
 of the user in your organization who should receive the notification. 
 
 ```python
-@lighthouse.error_catcher(email="example@codelighthouse.io")
+@lighthouse.error_catcher(email="alice@codelighthouse.io")
 def some_function():
   do_some_thing()
   print("Did something!")
@@ -101,6 +105,21 @@ def some_function():
 Note that the CodeLighthouse decorator must be inside of decorators used for web framework routing (Flask, Pyramid). 
 Alternatively, using `app.add_url_rule()` instead of the `@app.route()` decorator will work for Flask apps and 
 blueprints.
+
+### Sending Errors Manually
+
+Throughout your application, you probably already have some code that is handling errors as they come in.  If you want 
+CodeLighthouse to know about those, you can pass them by calling `lighthouse.error(exception)` and passing it the 
+exception and optionally an email for a user in your organization as well.  This allows CodeLighthouse to continue to 
+help your developers understand their code even if it isn't a mission critical situation.
+
+```python
+def some_function():
+    try:
+        call_a_broken_function()
+    except NameError as e:
+        lighthouse.error(e, email="bob@codelighthouse.io")
+```
 
 ### Adding Additional Users
 You can invite additional users to your organization in your admin panel on the 
@@ -131,15 +150,19 @@ app = Flask(__name__)
 
 # ADD THE CODELIGHTHOUSE error_catcher DECORATOR TO FUNCTIONS
 @app.route('/')
-@lighthouse.error_catcher(email='user1@codelighthouse.io')
+@lighthouse.error_catcher(email='alice@codelighthouse.io')
 def say_hello():
     return "Hello, World! Real-time error notifications brought to you by CodeLighthouse"
 
 
 @app.route('/<name>')
-@lighthouse.error_catcher(email='user2@codelighthouse.io')
+@lighthouse.error_catcher(email='bob@codelighthouse.io')
 def hello_name(name):
-    return f'Hello, {name}! '
+    try:
+        return f'Hello, {name}! '
+    except NameError as e:
+        lighthouse.error(e, email="alice@codelighthouse.io")
+        return "This error was handled by CodeLighthouse"
 
 app.run()
 ```
