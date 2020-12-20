@@ -68,13 +68,14 @@ class CodeLighthouse(ContextDecorator):
         :return: The error guid if it was successful -- otherwise, returns None
         """
         arguments = CodeLighthouse.format_arguments(args, kwargs)
-        stack_trace = CodeLighthouse.format_stack_trace(exception.__traceback__)
-
+        parsed_stack_trace = CodeLighthouse.format_stack_trace(exception.__traceback__)
+        stack_trace = exception.__traceback__
+        
         if not email:
             email = self.default_email
 
         guid = self.web_handler.send_error(error_type=type(exception).__name__,
-                                           function=stack_trace[0]["function"],
+                                           function=parsed_stack_trace[0]["function"],
                                            resource_group=self.resource_group,
                                            resource_name=self.resource_name,
                                            description=str(exception),
