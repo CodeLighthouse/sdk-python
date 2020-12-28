@@ -56,7 +56,7 @@ class CodeLighthouse(ContextDecorator):
 
         return CLH_wrapper_outer
 
-    def error(self, exception, email=None, args=None, kwargs=None):
+    def error(self, exception, email=None, data=None, args=None, kwargs=None):
         """
         This prepares the exception for our server.  You can optionally pass an email for a specific developer or use
         the global default.
@@ -70,7 +70,7 @@ class CodeLighthouse(ContextDecorator):
         arguments = CodeLighthouse.format_arguments(args, kwargs)
         parsed_stack_trace = CodeLighthouse.format_stack_trace(exception.__traceback__)
         stack_trace = exception.__traceback__
-        
+
         if not email:
             email = self.default_email
 
@@ -82,7 +82,8 @@ class CodeLighthouse(ContextDecorator):
                                            email=email,
                                            arguments=arguments,
                                            stack_trace=stack_trace,
-                                           github_repo=self.github_repo)
+                                           github_repo=self.github_repo,
+                                           user_data = data)
 
         # IF WEB_HANDLER ERRORS OUT, IT RETURNS NONE
         return guid
