@@ -128,7 +128,7 @@ def some_function():
 When you're sending errors manually using this method, you can also optionally attach additional data that will show
 up in the admin panel in the error view. The most common use case for this is including additional information that will
 help your developers to identify and debug the error. For example, you could attach information about the currently
-logged in user that experienced the error, connection information, or other application state information.
+logged-in user that experienced the error, connection information, or other application state information.
 
 ```python
 def some_function():
