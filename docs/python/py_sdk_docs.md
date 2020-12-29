@@ -92,6 +92,14 @@ lighthouse = CodeLighthouse(
 Once you have configured the SDK, it's super easy to use! Simply use the CodeLighthouse `error_catcher` decorator above 
 functions that you want to get notifications for uncaught errors in. 
 
+### The Global Exception Handler
+By default, the CodeLighthouse SDK will send error notifications for all uncaught exceptions to the user specified by 
+`default_email` in the configuration. To turn this off, set the parameter `send_uncaught_exceptions` to `false`
+
+**Note that some frameworks such as Flask may handle exceptions that occur in routes, such that application errors
+will not be caught by the global handler.** Please see the section on "Using the Error Catcher Decorator" for 
+information on how to use CodeLighthouse for these types of applications. 
+
 ### Using the Error Catcher Decorator
 Each decorator only applies to the one function defined directly below it. In the decorator, specify the email address 
 of the user in your organization who should receive the notification. 
