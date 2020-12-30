@@ -30,6 +30,18 @@ class CodeLighthouseWebHandler:
             # CHECK IF IT HAS AN __DICT__ ATTRIBUTE AND IF SO USE THAT
             if hasattr(kwargs['user_data'], '__dict__'):
                 kwargs['user_data'] = kwargs['user_data'].__dict__
+
+                # AFTER TRYING __DICT__, VERIFY THAT IT WORKS
+                try:
+                    json.dumps(kwargs)
+
+                # IF IT DOESN'T, ASSUME IT'S NOT SERIALIZABLE
+                except TypeError as e2:
+                    kwargs['user_data'] = {'error': 'The passed data was not JSON-serializable'}
+                    print('CODELIGHTHOUSE: additional data specified in CodeLighthouse.error() could not be serialized'
+                          'to JSON. Omitting it from the report.')
+
+            # IF NOT, ASSUME IT'S NOT SERIALIZABLE
             else:
                 kwargs['user_data'] = {'error': 'The passed data was not JSON-serializable'}
                 print('CODELIGHTHOUSE: additional data specified in CodeLighthouse.error() could not be serialized'
