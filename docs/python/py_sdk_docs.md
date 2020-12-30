@@ -126,11 +126,10 @@ exception and optionally an email for a user in your organization as well.  This
 help your developers understand their code even if it isn't a mission critical situation.
 
 ```python
-def some_function():
-    try:
-        call_a_broken_function()
-    except NameError as e:
-        lighthouse.error(e, email="bob@codelighthouse.io")
+try:
+    call_a_broken_function()
+except NameError as e:
+    lighthouse.error(e, email="bob@codelighthouse.io")
 ```
 
 When you're sending errors manually using this method, you can also optionally attach additional data that will show
@@ -139,18 +138,34 @@ help your developers to identify and debug the error. For example, you could att
 logged-in user that experienced the error, connection information, or other application state information.
 
 ```python
-def some_function():
-    try:
-        call_a_broken_function()
-    except NameError as e:
-        lighthouse.error(e, email="bob@codelighthouse.io", data=some_data)
+try:
+    call_a_broken_function()
+except NameError as e:
+    lighthouse.error(e, email="bob@codelighthouse.io", data=some_data)
 ```
 
-Make sure that the data you're passing (via the `data` argument as show above) can be serialized into JSON. Dictionaries
-and native types will easily work, but if you choose to pass an object, pass the class's `__dict__` property instead 
+Make sure that the data you're passing (via the `data` 
+argument as show above) can be serialized into JSON. If you're including an object, pass the class's `__dict__` property instead 
 and ensure that it does not contain circular references. For more information on the `__dict__` property of Python
 classes, refer to [the python docs](https://docs.python.org/3/library/stdtypes.html#object.__dict__).
+If the data you pass is not able to be serialized to JSON, then it will not be included with the error in your dashboard.
 
+
+We recommend formatting the data you're passing as a dictionary. Doing so makes it much easier to attach multiple
+pieces of information, and can make the information more clear.
+
+```python
+try:
+    call_a_broken_function()
+except NameError as e:
+    
+    # example data your app might have, but you can use anything
+    debug_data = {
+        'user': user_id,
+        'path': request.path
+    }
+    lighthouse.error(e, email="bob@codelighthouse.io", data=debug_data)
+```
 
 ### Adding Additional Users
 You can invite additional users to your organization in your admin panel on the 
