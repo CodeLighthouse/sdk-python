@@ -70,7 +70,6 @@ class CodeLighthouse(ContextDecorator):
         arguments = CodeLighthouse.format_arguments(args, kwargs)
         parsed_stack_trace = CodeLighthouse.format_stack_trace(exception.__traceback__)
         stack_trace = ''.join(traceback.format_exception(None, exception, exception.__traceback__))
-        print(stack_trace)
 
         if not email:
             email = self.default_email
