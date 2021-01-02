@@ -92,6 +92,14 @@ lighthouse = CodeLighthouse(
 Once you have configured the SDK, it's super easy to use! Simply use the CodeLighthouse `error_catcher` decorator above 
 functions that you want to get notifications for uncaught errors in. 
 
+### The Global Exception Handler
+By default, the CodeLighthouse SDK will send error notifications for all uncaught exceptions to the user specified by 
+`default_email` in the configuration. To turn this off, set the parameter `send_uncaught_exceptions` to `false`
+
+**Note that some frameworks such as Flask may handle exceptions that occur in routes, such that application errors
+will not be caught by the global handler.** Please see the section on "Using the Error Catcher Decorator" for 
+information on how to use CodeLighthouse for these types of applications. 
+
 ### Using the Error Catcher Decorator
 Each decorator only applies to the one function defined directly below it. In the decorator, specify the email address 
 of the user in your organization who should receive the notification. 
@@ -118,11 +126,45 @@ exception and optionally an email for a user in your organization as well.  This
 help your developers understand their code even if it isn't a mission critical situation.
 
 ```python
-def some_function():
-    try:
-        call_a_broken_function()
-    except NameError as e:
-        lighthouse.error(e, email="bob@codelighthouse.io")
+try:
+    call_a_broken_function()
+except NameError as e:
+    lighthouse.error(e, email="bob@codelighthouse.io")
+```
+
+When you're sending errors manually using this method, you can also optionally attach additional data that will show
+up in the admin panel in the error view. The most common use case for this is including additional information that will
+help your developers to identify and debug the error. For example, you could attach information about the currently
+logged-in user that experienced the error, connection information, or other application state information.
+
+```python
+try:
+    call_a_broken_function()
+except NameError as e:
+    lighthouse.error(e, email="bob@codelighthouse.io", data=some_data)
+```
+
+Make sure that the data you're passing (via the `data` 
+argument as show above) can be serialized into JSON. If you're including an object, pass the class's `__dict__` property instead 
+and ensure that it does not contain circular references. For more information on the `__dict__` property of Python
+classes, refer to [the python docs](https://docs.python.org/3/library/stdtypes.html#object.__dict__).
+If the data you pass is not able to be serialized to JSON, then it will not be included with the error in your dashboard.
+
+
+We recommend formatting the data you're passing as a dictionary. Doing so makes it much easier to attach multiple
+pieces of information, and can make the information more clear.
+
+```python
+try:
+    call_a_broken_function()
+except NameError as e:
+    
+    # example data your app might have, but you can use anything
+    debug_data = {
+        'user': user_id,
+        'path': request.path
+    }
+    lighthouse.error(e, email="bob@codelighthouse.io", data=debug_data)
 ```
 
 ### Adding Additional Users

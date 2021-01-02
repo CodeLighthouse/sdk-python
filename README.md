@@ -1,6 +1,6 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/codelighthouse/sdk-python/badge)](https://www.codefactor.io/repository/github/codelighthouse/sdk-python)
 
-# CodeLighthouse Python SDK
+# CodeLighthouse's Python SDK
 
 Quick Links |
 --- |
@@ -14,3 +14,4 @@ We know your customers are important to you.  Codelighthouse helps you minimize 
 response time to mission-critical issues that arise through the use of your software.  As soon as an error occurs, the
 developer responsible for maintaining that code is notified via his integration of choice.  This removes the need for 
 excess support infrastructure within your organization.
+
