@@ -47,9 +47,6 @@ class CodeLighthouseWebHandler:
                 print('CODELIGHTHOUSE: additional data specified in CodeLighthouse.error() could not be serialized'
                       'to JSON. Omitting it from the report.')
 
-
-
-
         prepared = requests.Request("POST", url, headers=headers, data=json.dumps(kwargs))
         prepared = prepared.prepare()
         s = requests.Session()
