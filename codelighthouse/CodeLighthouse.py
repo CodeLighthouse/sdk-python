@@ -44,6 +44,7 @@ class CodeLighthouse(ContextDecorator):
         """
         Wraps the function allowing for any previously uncaught error to be caught by CodeLighthouse
         """
+
         def CLH_wrapper_outer(f):
             @functools.wraps(f)
             def CLH_wrapper_inner(*args, **kw):
@@ -83,7 +84,7 @@ class CodeLighthouse(ContextDecorator):
                                            arguments=arguments,
                                            stack_trace=stack_trace,
                                            github_repo=self.github_repo,
-                                           user_data = data)
+                                           user_data=data)
 
         # IF WEB_HANDLER ERRORS OUT, IT RETURNS NONE
         return guid
