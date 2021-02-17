@@ -1,5 +1,7 @@
-from codelighthouse.CodeLighthouse import CodeLighthouse
+from .CodeLighthouse import configure, error, error_catcher
 
 __all__ = [
-    "CodeLighthouse"
+    "configure",
+    "error",
+    "error_catcher"
 ]
