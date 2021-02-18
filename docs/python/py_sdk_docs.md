@@ -75,11 +75,10 @@ to filter and visualize errors on a per-`resource_group` basis as well.
 ### Configuration Example
 ```python
 # IMPORT CODELIGHTHOUSE
-from codelighthouse import CodeLighthouse
-import os
+import codelighthouse as CodeLighthouse
 
 # INSTANTIATE THE ERROR CATCHER
-lighthouse = CodeLighthouse(
+CodeLighthouse.configure(
     organization_name="CodeLighthouse, LLC",
     x_api_key="your API Key",
     default_email="hello@codelighthouse.io",
@@ -105,7 +104,7 @@ Each decorator only applies to the one function defined directly below it. In th
 of the user in your organization who should receive the notification. 
 
 ```python
-@lighthouse.error_catcher(email="alice@codelighthouse.io")
+@CodeLighthouse.error_catcher(email="alice@codelighthouse.io")
 def some_function():
   do_some_thing()
   print("Did something!")
@@ -129,7 +128,7 @@ help your developers understand their code even if it isn't a mission critical s
 try:
     call_a_broken_function()
 except NameError as e:
-    lighthouse.error(e, email="bob@codelighthouse.io")
+    CodeLighthouse.error(e, email="bob@codelighthouse.io")
 ```
 
 When you're sending errors manually using this method, you can also optionally attach additional data that will show
@@ -141,7 +140,7 @@ logged-in user that experienced the error, connection information, or other appl
 try:
     call_a_broken_function()
 except NameError as e:
-    lighthouse.error(e, email="bob@codelighthouse.io", data=some_data)
+    CodeLighthouse.error(e, email="bob@codelighthouse.io", data=some_data)
 ```
 
 Make sure that the data you're passing (via the `data` 
@@ -164,7 +163,7 @@ except NameError as e:
         'user': user_id,
         'path': request.path
     }
-    lighthouse.error(e, email="bob@codelighthouse.io", data=debug_data)
+    CodeLighthouse.error(e, email="bob@codelighthouse.io", data=debug_data)
 ```
 
 ### Adding Additional Users
@@ -180,11 +179,11 @@ flask to illustrate a common application of our SDK.
 ```python
 # IMPORTS
 from flask import Flask
-from codelighthouse import CodeLighthouse
+import codelighthouse as CodeLighthouse
 import os
 
 # CONFIGURE THE SDK
-lighthouse = CodeLighthouse(
+CodeLighthouse.configure(
     organization_name="CodeLighthouse, LLC",
     x_api_key=os.environ.get("CODELIGHTHOUSE_API_KEY"),
     resource_group="serverless-applications",
@@ -196,13 +195,13 @@ app = Flask(__name__)
 
 # ADD THE CODELIGHTHOUSE error_catcher DECORATOR TO FUNCTIONS
 @app.route('/')
-@lighthouse.error_catcher(email='alice@codelighthouse.io')
+@CodeLighthouse.error_catcher(email='alice@codelighthouse.io')
 def say_hello():
     return "Hello, World! Real-time error notifications brought to you by CodeLighthouse"
 
 
 @app.route('/<name>')
-@lighthouse.error_catcher(email='bob@codelighthouse.io')
+@CodeLighthouse.error_catcher(email='bob@codelighthouse.io')
 def hello_name(name):
     try:
         return f'Hello, {name}! '
