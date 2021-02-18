@@ -4,6 +4,7 @@ from codelighthouse.CodeLighthouseWebHandler import CodeLighthouseWebHandler
 import traceback
 import sys
 import threading
+from typing import Optional
 
 
 class CodeLighthouse(ContextDecorator):
@@ -39,23 +40,6 @@ class CodeLighthouse(ContextDecorator):
             self.web_handler.DEBUG = True
         else:
             self.web_handler.BASE_URL = "https://codelighthouse.io"
-
-    def error_catcher(self, email: str):
-        """
-        Wraps the function allowing for any previously uncaught error to be caught by CodeLighthouse
-        """
-
-        def CLH_wrapper_outer(f):
-            @functools.wraps(f)
-            def CLH_wrapper_inner(*args, **kw):
-                try:
-                    return f(*args, **kw)
-                except BaseException as e:
-                    self.error(e, email, args, kw)
-
-            return CLH_wrapper_inner
-
-        return CLH_wrapper_outer
 
     def error(self, exception, email=None, data=None, args=None, kwargs=None):
         """
@@ -170,3 +154,58 @@ class CodeLighthouse(ContextDecorator):
             }
             output.append(data)
         return output
+
+
+clh_instance: Optional[CodeLighthouse] = None
+
+
+def configure(organization_name, x_api_key, default_email, send_uncaught_exceptions=True,
+              environment="prod", resource_group: str = None,
+              resource_name: str = None, github_repo: str = None):
+    """
+    CONFIGURE THE SDK WITH THE OPTIONS IN THE DOCUMENTATION
+    :param organization_name:
+    :param x_api_key:
+    :param default_email:
+    :param send_uncaught_exceptions:
+    :param environment:
+    :param resource_group:
+    :param resource_name:
+    :param github_repo:
+    :return:
+    """
+    global clh_instance
+    clh_instance = CodeLighthouse(organization_name, x_api_key, default_email,
+                                  send_uncaught_exceptions=send_uncaught_exceptions,
+                                  environment=environment, resource_group=resource_group,
+                                  resource_name=resource_name)
+
+
+def error_catcher(email: str):
+    """
+    Wraps the function allowing for any previously uncaught error to be caught by CodeLighthouse
+    """
+    global clh_instance
+
+    if not clh_instance:
+        raise Exception("You must configure the CodeLighthouse module first!")
+
+    def CLH_wrapper_outer(f):
+        @functools.wraps(f)
+        def CLH_wrapper_inner(*args, **kw):
+            try:
+                return f(*args, **kw)
+            except BaseException as e:
+                clh_instance.error(e, email, args, kw)
+
+        return CLH_wrapper_inner
+
+    return CLH_wrapper_outer
+
+
+def error(exception, email=None, data=None, args=None, kwargs=None):
+    global clh_instance
+    if not clh_instance:
+        raise Exception("You must configure the CodeLighthouse module first!")
+
+    return clh_instance.error(exception, email=email, data=data, args=args, kwargs=kwargs)
